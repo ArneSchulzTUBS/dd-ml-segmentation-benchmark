@@ -41,7 +41,7 @@ def predict_chips_benchmark(basedir, chip_file_list, model, save_predictions=Tru
 
 
 def generate_predict_image(basedir, input_file, output, model, chip_size, save_prediction=True, save_overlay=False):
-    output_file = os.path.join(basedir, f'predictions/{output}-prediction.png')
+    output_file = os.path.join(basedir, f'predictions/{output}.png')
     size = chip_size
     with Image.open(input_file).convert('RGB') as img:
         nimg = np.array(Image.open(input_file).convert('RGB'))

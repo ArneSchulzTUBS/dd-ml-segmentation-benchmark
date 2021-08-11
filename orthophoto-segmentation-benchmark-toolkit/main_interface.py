@@ -1,4 +1,6 @@
 import argparse
+from pathlib import Path
+
 from experiment import Experiment
 from datasets import DroneDeployDataset
 from util import *
@@ -11,7 +13,8 @@ if __name__ == '__main__':
     parser.add_argument("-b", "--benchmark", help="run inference", action="store_true")
     parser.add_argument("-s", "--score", help="score model", action="store_true")
     parser.add_argument("-sg", "--score_generalisation", help="score model generalisation", action="store_true")
-    parser.add_argument("-p", "--predict", help="predict image", action="store_true")
+    parser.add_argument("-p", "--predict", help="predict image", type=str, default=None)
+    parser.add_argument("-o", "--output", help="path of predict image output file", type=str)
     parser.add_argument("-e", "--export", help="export model", action="store_true")
     args = parser.parse_args()
 
@@ -21,9 +24,9 @@ if __name__ == '__main__':
         "chip_size": 384,
         "batch_size": 8,
         "epochs": 40,
-        "model_backbone": "mobilenetv3_minimalistic",
-        "model_backend": PSPnetBackend,
-        "load_experiment": "",
+        "model_backbone": "efficientnetb2",
+        "model_backend": FPNBackend,
+        "load_experiment": "fpn_efficientnetb2-2020-11-30_11-29-55",
         "load_best_model": True,
     }
 
@@ -62,7 +65,10 @@ if __name__ == '__main__':
         experiment.score_generalization()
 
     if args.predict:
-        experiment.predict("./RGB100MP_2020-06-02_10-05-18cropsq.tif", "./testpp4.png", postprocessing=True)
+        input_file = args.predict
+        output_file_name = args.output if args.output else f"{Path(input_file).stem}-prediction"
+        predicted_file = experiment.predict(input_file, output_file_name, postprocessing=False, save_overlay=True)
+        print(f"Prediction of {input_file} saved to {predicted_file}")
 
     if args.export:
         experiment.export_model()

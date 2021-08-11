@@ -149,12 +149,18 @@ To train a model with given config execute
 
 ```bash
 python3 main_interface.py -t
-
 ```
 
 A new directory at experiments/ will be created where the model and additional files like a model summary and plots of the train/validation loss and mIoU will be placed after training finished 
 
 ## Predict
+
+```bash
+python3 main_interface.py -p "INPUT_FILE.tif" -o "OUTPUT_FILE_NAME"
+```
+
+Use to generate predictions on new images with an existing model given by the defined config.
+Saves the prediction mask and a created overlay view of input image and the prediction mask to the "predictions" directory of the loaded experiment
 
 ## Score
 
@@ -162,15 +168,13 @@ To evalutate the model performance generate predictions of the test chip and sta
 
 ```bash
 python3 main_interface.py -b -s
-
 ```
 This will create a inference_benchmark.json file inference timings and a scores.json with precision, recall, class-vise IoU, mIoU and frequency weighted mIoU will be created 
 
 ## Export
 
 ```bash
-python3 main_interface.py -b -s
-
+python3 main_interface.py -e
 ```
 
 will export the model to tensorflow's and onnx format
